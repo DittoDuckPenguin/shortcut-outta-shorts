@@ -4,7 +4,8 @@ A Chrome extension to help you break free from endless short-form video scrollin
 
 ## Features
 
-- Blocks or hides short-form video content on popular platforms
+- Notifies you when you're on a blacklisted site every 30 seconds
+- Closes the tab forcefully if you are found on it for more than 2 minutes
 - Customizable settings for different websites
 - Simple, distraction-free interface
 - Lightweight and privacy-friendly
