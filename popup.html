@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Shortcut Outta Shorts</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            width: 300px;
+            padding: 10px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        h2 {
+            color: #4CAF50;
+            margin-top: 0;
+            font-size: 1.2em;
+        }
+
+        #addWordContainer {
+            display: flex;
+            margin-bottom: 15px;
+        }
+
+        #newWordInput {
+            flex-grow: 1;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-right: 5px;
+        }
+
+        #addWordButton {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+
+        #addWordButton:hover {
+            background-color: #45a049;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            max-height: 200px;
+            /* Limit height for scroll if many items */
+            overflow-y: auto;
+            /* Enable scrolling */
+            border: 1px solid #eee;
+            border-radius: 4px;
+            background-color: white;
+        }
+
+        li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        li:last-child {
+            border-bottom: none;
+        }
+
+        .removeButton {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.8em;
+        }
+
+        .removeButton:hover {
+            background-color: #da190b;
+        }
+
+        #message {
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: #666;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Shortcut Outta Shorts</h2>
+    <div id="addWordContainer">
+        <input type="text" id="newWordInput" placeholder="Add word or domain (e.g., shorts, x.com)">
+        <button id="addWordButton">Add</button>
+    </div>
+    <ul id="wordList">
+    </ul>
+    <p id="message"></p>
+
+    <script src="popup.js"></script>
+</body>
+
+</html>
