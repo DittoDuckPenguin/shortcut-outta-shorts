@@ -131,6 +131,76 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
   }
 });
 
+// Function to check the active tab and inject/remove overlay as needed
+async function handleTabOverlay(tabId) {
+  console.log("Background: Checking tab for overlay injection/removal...");
+  await checkCurrentTab();
+
+  // Get the specified tab
+  let tab = await chrome.tabs.get(tabId);
+  if (tab && tab.url) {
+    const url = tab.url.toLowerCase();
+    if (currentTargetSites && currentTargetSites.length > 0) {
+      const isOnTargetSite = currentTargetSites.some(site => url.includes(site));
+      if (isOnTargetSite) {
+        // Inject a warning overlay into the tab
+        chrome.scripting.executeScript({
+          target: { tabId: tab.id },
+          func: () => {
+            // Remove any existing overlay first
+            const existing = document.getElementById('danger-stay-away-overlay');
+            if (existing) existing.remove();
+
+            const overlay = document.createElement('div');
+            overlay.id = 'danger-stay-away-overlay';
+            overlay.style.position = 'fixed';
+            overlay.style.top = '0';
+            overlay.style.left = '0';
+            overlay.style.width = '100vw';
+            overlay.style.height = '100vh';
+            overlay.style.background = 'rgba(255,0,0,0.7)';
+            overlay.style.zIndex = '999999';
+            overlay.style.display = 'flex';
+            overlay.style.justifyContent = 'center';
+            overlay.style.alignItems = 'center';
+            overlay.style.pointerEvents = 'none';
+
+            const text = document.createElement('div');
+            text.textContent = 'Danger, Stay Away!';
+            text.style.color = 'white';
+            text.style.fontSize = '3em';
+            text.style.fontWeight = 'bold';
+            text.style.textShadow = '2px 2px 8px #000';
+            overlay.appendChild(text);
+
+            document.body.appendChild(overlay);
+          }
+        });
+      } else {
+        // Remove overlay if not on a target site
+        chrome.scripting.executeScript({
+          target: { tabId: tab.id },
+          func: () => {
+            const existing = document.getElementById('danger-stay-away-overlay');
+            if (existing) existing.remove();
+          }
+        });
+      }
+    }
+  }
+}
+
+// Listen for tab switching (tab activation)
+chrome.tabs.onActivated.addListener(async (activeInfo) => {
+  await handleTabOverlay(activeInfo.tabId);
+});
+
+// Listen for tab updates (e.g., navigation within the same tab)
+chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
+  if (changeInfo.status === 'complete' && tab.active) {
+    await handleTabOverlay(tabId);
+  }
+});
 
 // Listen for messages from other parts of the extension (e.g., popup)
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
